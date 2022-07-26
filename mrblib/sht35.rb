@@ -5,7 +5,7 @@
 
 class SHT35
 
-  ADRS_SHT35 = 0x45
+  ADDR = 0x45
   
   def to_uint16( b1, b2 )
     return (b1 << 8 | b2)
@@ -35,9 +35,9 @@ class SHT35
 
     @i2c = i2c
     
-    @i2c.write( ADRS_SHT35, 0x30, 0xa2 )          # Reset
-    res = @i2c.read( ADRS_SHT35, 3, 0xf3, 0x2d )  # Read Status
-
+    @i2c.write( SHT35::ADDR, 0x30, 0xa2 )          # Reset
+    res = @i2c.read( SHT35::ADDR, 3, 0xf3, 0x2d )  # Read Status
+    
     if crc8(res[0,2]) != res.getbyte(2)
       puts "error"
       return false     
@@ -54,12 +54,10 @@ class SHT35
   #
   def is_ready?
     
-    @data = {}
-
-    @i2c.write( ADRS_SHT35, 0x2c, 0x06 )
+    @i2c.write( SHT35::ADDR, 0x2c, 0x06 )
     sleep_ms( 12 )
-    res = @i2c.read( ADRS_SHT35, 6 )
-
+    res = @i2c.read( SHT35::ADDR, 6 )
+    
     # check CRC
     s2 = ""
     res.each_byte {|byte|
@@ -73,22 +71,22 @@ class SHT35
     st = to_uint16( res.getbyte(0), res.getbyte(1) ).to_f
     srh = to_uint16( res.getbyte(3), res.getbyte(4) ).to_f
     
-    @data[:temperature] = -45 + 175 * st / 65535
-    @data[:humidity]    = 100 * srh / 65535
+    @temp = -45 + 175 * st / 65535
+    @humi = 100 * srh / 65535
     
-    if !dataata 
+    if @temp && @humi
       return true
     else
       return false
     end
   end
-
-  def temperature
-    return @data[:temperature]
+  
+  def temp
+    return @temp
   end
-
-  def temperature
-    return @data[:humidity]
+  
+  def humi
+    return @humi
   end
 end
 
