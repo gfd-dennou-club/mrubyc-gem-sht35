@@ -7,8 +7,8 @@ sht35 = SHT35.new( i2c )
 while true
   if sht35.is_ready?
   
-    puts sprintf( "Temperature:%5.1f ", sht35.temperature )
-    puts sprintf( "Humidity:%5.1f ",    sht35.humidity    )
+    puts sprintf( "Temperature:%5.1f ", sht35.temp )
+    puts sprintf( "Humidity:%5.1f ",    sht35.humi )
 
   end
   sleep 1
