@@ -10,7 +10,7 @@ https://files.seeedstudio.com/wiki/Grove-I2C_High_Accuracy_Temp-Humi_Sensor-SHT3
 ```ruby
 puts("SHT35 HumiditySensor")
 
-i2c = I2C.new(22, 21)
+i2c = I2C.new()
 sht35 = SHT35.new( i2c )
 
 loop do
